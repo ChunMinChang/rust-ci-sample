@@ -1,0 +1,14 @@
+# See lastest version from: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      # See lastest version from: https://circleci.com/developer/images/image/cimg/rust
+      - image: cimg/rust:1.50.0
+    steps:
+      - checkout
+      - run: cargo --version
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy -- -D warnings
+      - run: cargo test --verbose
