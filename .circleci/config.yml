@@ -8,7 +8,32 @@ jobs:
       - image: cimg/rust:1.50.0
     steps:
       - checkout
-      - run: cargo --version
-      - run: cargo fmt --all -- --check
-      - run: cargo clippy -- -D warnings
-      - run: cargo test --verbose
+      - run:
+          name: Check version
+          command: |
+            cargo --version
+            rustc --version
+      - run: 
+          name: Check formatting
+          command: |
+            cargo fmt --all -- --check
+      - run:
+          name: Check linting
+          command: |
+            cargo clippy -- -D warnings
+      - run:
+          name: Stable Build/Test
+          command: |
+            rustup install stable
+            rustup run stable rustc --version --verbose
+            rustup run stable cargo --version --verbose
+            rustup run stable cargo build
+            rustup run stable cargo test --verbose
+      - run:
+          name: Nightly Build/Test
+          command: |
+            rustup install nightly
+            rustup run nightly rustc --version --verbose
+            rustup run nightly cargo --version --verbose
+            rustup run nightly cargo build
+            rustup run nightly cargo test --verbose
